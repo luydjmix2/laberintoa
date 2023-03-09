@@ -32,6 +32,11 @@ function perdio(labe: number[][]) {
                     basic.showIcon(IconNames.Sad)
                     basic.showString("Game Over")
                     contDL = 0
+                    basic.clearScreen()
+                    dibujarLaberinto(nivelJugador)
+                    posicionPersonaje = inicioPersonajeN[`inicioPersonajeN${nivelJugador}`]
+                    led.plot(posicionPersonaje[0], posicionPersonaje[1])
+                    led.plotBrightness(ganadore[`meta${nivelJugador}`][0], ganadore[`meta${nivelJugador}`][1], 60)
                 }
             }
         }
@@ -111,25 +116,30 @@ nivelJugador = 1
 menu()
 posicionPersonaje = [0, 0]
 let puedoHacerMovimiento = 1
-function delimitarMapa(pP: number[], labe:number[][]) {
+function delimitarMapa(pP: number[], labe: number[][]) {
     if (pP[0] > 4) {
-        console.log("mayor que 4 en x")
-        perdio(labe)
+        terminoElJuego()
     }
     else if (pP[0] < 0) {
-        console.log("menor que 0 en x")
-        perdio(labe)
+        terminoElJuego()
     }
     else if (pP[1] > 4) {
-        console.log("mayor que 4 en y")
-        perdio(labe)
+        terminoElJuego()
     }
     else if (pP[1] < 0) {
-        console.log("menor que 0 en y")
-        perdio(labe)
+        terminoElJuego()
     }
 }
 
+function terminoElJuego() {
+    basic.clearScreen()
+    basic.showIcon(IconNames.Sad)
+    basic.showString("Game Over")
+    dibujarLaberinto(nivelJugador)
+    posicionPersonaje = inicioPersonajeN[`inicioPersonajeN${nivelJugador}`]
+    led.plot(posicionPersonaje[0], posicionPersonaje[1])
+    led.plotBrightness(ganadore[`meta${nivelJugador}`][0], ganadore[`meta${nivelJugador}`][1], 60)
+}
 type Matrices2 = {
     [key: string]: number[][];
 }
@@ -152,11 +162,10 @@ let inicioPersonajeN: Matrices1 = {
 let matrices: Matrices2 = {
     matriz1: [
         [1, 1, 0, 0, 0],
-        [1, 1, 0, 0, 0],
         [0, 1, 0, 1, 1],
         [0, 1, 0, 0, 0],
         [0, 0, 1, 1, 0],
-        [1, 0, 0, 0, 0]
+        [1, 0, 0, 0, 0],
     ],
     matriz2: [
         [0, 0, 0, 0, 0],
