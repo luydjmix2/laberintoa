@@ -1,21 +1,29 @@
-function gano () {
+function gano() {
     if (posicionPersonaje[0] == ganadore[`meta${nivelJugador}`][0] && posicionPersonaje[1] == ganadore[`meta${nivelJugador}`][1]) {
         basic.clearScreen()
         basic.showIcon(IconNames.Happy)
         basic.showString("Ok")
         contDL = 0
-        if (nivelJugador < niveles){
-            nivelJugador = nivelJugador+1
+        if (nivelJugador < niveles) {
+            nivelJugador = nivelJugador + 1
+            basic.clearScreen()
+            dibujarLaberinto(nivelJugador)
+            led.plot(posicionPersonaje[0], posicionPersonaje[1])
+            led.plotBrightness(ganadore[`meta${nivelJugador}`][0], ganadore[`meta${nivelJugador}`][1], 60)
+        } else {
+            nivelJugador = 1
+            menu()
         }
+
     }
 }
-function menu () {
+function menu() {
     basic.showString("menu")
     basic.showString("P1 INICIAR")
     basic.showString("P2 VER NIVELES")
 }
 
-function perdio (labe: number[][]) {
+function perdio(labe: number[][]) {
     for (let m = 0; m <= 4; m++) {
         for (let n = 0; n <= 4; n++) {
             if (labe[m][n] == 1) {
@@ -29,7 +37,7 @@ function perdio (labe: number[][]) {
         }
     }
 }
-function personaje (x: number, y: number) {
+function personaje(x: number, y: number) {
     led.plot(x, y)
 }
 input.onButtonPressed(Button.A, function () {
@@ -41,6 +49,7 @@ input.onButtonPressed(Button.A, function () {
     perdio(matrices[`matriz${nivelJugador}`])
     personaje(posicionPersonaje[0], posicionPersonaje[1])
     gano()
+    delimitarMapa(posicionPersonaje, matrices[`matriz${nivelJugador}`])
     led.plotBrightness(ganadore[`meta${nivelJugador}`][0], ganadore[`meta${nivelJugador}`][1], 60)
 })
 input.onGesture(Gesture.Shake, function () {
@@ -52,6 +61,7 @@ input.onGesture(Gesture.Shake, function () {
     perdio(matrices[`matriz${nivelJugador}`])
     personaje(posicionPersonaje[0], posicionPersonaje[1])
     gano()
+    delimitarMapa(posicionPersonaje, matrices[`matriz${nivelJugador}`])
     led.plotBrightness(ganadore[`meta${nivelJugador}`][0], ganadore[`meta${nivelJugador}`][1], 60)
 })
 input.onPinPressed(TouchPin.P2, function () {
@@ -63,7 +73,6 @@ input.onPinPressed(TouchPin.P2, function () {
     basic.clearScreen()
     dibujarLaberinto(nivelJugador)
     led.plot(posicionPersonaje[0], posicionPersonaje[1])
-    gano()
     led.plotBrightness(ganadore[`meta${nivelJugador}`][0], ganadore[`meta${nivelJugador}`][1], 60)
 })
 input.onButtonPressed(Button.AB, function () {
@@ -75,6 +84,7 @@ input.onButtonPressed(Button.AB, function () {
     perdio(matrices[`matriz${nivelJugador}`])
     personaje(posicionPersonaje[0], posicionPersonaje[1])
     gano()
+    delimitarMapa(posicionPersonaje, matrices[`matriz${nivelJugador}`])
     led.plotBrightness(ganadore[`meta${nivelJugador}`][0], ganadore[`meta${nivelJugador}`][1], 60)
 })
 input.onButtonPressed(Button.B, function () {
@@ -86,6 +96,7 @@ input.onButtonPressed(Button.B, function () {
     perdio(matrices[`matriz${nivelJugador}`])
     personaje(posicionPersonaje[0], posicionPersonaje[1])
     gano()
+    delimitarMapa(posicionPersonaje, matrices[`matriz${nivelJugador}`])
     led.plotBrightness(ganadore[`meta${nivelJugador}`][0], ganadore[`meta${nivelJugador}`][1], 60)
 })
 let laverinto1: number[][] = []
@@ -100,8 +111,21 @@ nivelJugador = 1
 menu()
 posicionPersonaje = [0, 0]
 let puedoHacerMovimiento = 1
-function delimitarMapa(pP: number[], labe: number[][]){
-    if(pP[0] >4){
+function delimitarMapa(pP: number[], labe:number[][]) {
+    if (pP[0] > 4) {
+        console.log("mayor que 4 en x")
+        perdio(labe)
+    }
+    else if (pP[0] < 0) {
+        console.log("menor que 0 en x")
+        perdio(labe)
+    }
+    else if (pP[1] > 4) {
+        console.log("mayor que 4 en y")
+        perdio(labe)
+    }
+    else if (pP[1] < 0) {
+        console.log("menor que 0 en y")
         perdio(labe)
     }
 }
@@ -115,18 +139,19 @@ type Matrices1 = {
 
 let ganadore: Matrices1 = {
     meta1: [1, 0],
-    meta2: [1, 0],
-    meta3: [1, 0]
+    meta2: [4, 0],
+    meta3: [0, 0]
 }
 
 let inicioPersonajeN: Matrices1 = {
     inicioPersonajeN1: [0, 4],
-    inicioPersonajeN2: [1, 0],
-    inicioPersonajeN3: [1, 0]
+    inicioPersonajeN2: [0, 4],
+    inicioPersonajeN3: [1, 3]
 }
 
-let matrices: Matrices2  = {
+let matrices: Matrices2 = {
     matriz1: [
+        [1, 1, 0, 0, 0],
         [1, 1, 0, 0, 0],
         [0, 1, 0, 1, 1],
         [0, 1, 0, 0, 0],
