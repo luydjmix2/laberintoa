@@ -9,7 +9,7 @@ function gano() {
             basic.clearScreen()
             dibujarLaberinto(nivelJugador)
             led.plot(posicionPersonaje[0], posicionPersonaje[1])
-            led.plotBrightness(ganadore[`meta${nivelJugador}`][0], ganadore[`meta${nivelJugador}`][1], 60)
+            led.plotBrightness(ganadore[`meta${nivelJugador}`][0], ganadore[`meta${nivelJugador}`][1], 40)
         } else {
             nivelJugador = 1
             menu()
@@ -187,7 +187,7 @@ function dibujarLaberinto(num: number) {
     for (let i = 0; i <= 4; i++) {
         for (let j = 0; j <= 4; j++) {
             if (matrices[`matriz${num}`][i][j] == 1) {
-                led.plot(i, j)
+                led.plotBrightness(i, j,160)
             }
         }
     }
